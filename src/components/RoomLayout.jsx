@@ -1,7 +1,7 @@
 import React from 'react';
 import ControlPanel from './ControlPanel';
 import RoomPreview from './RoomPreview';
-import '../styles/App.css'; // Or your own RoomLayout.css if preferred
+import '../styles/App.css'; 
 
 const RoomLayout = () => {
   return (

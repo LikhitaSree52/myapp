@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './RoomPreview.css';
 
-const RoomPreview = ({ dimensions = {}, wallImages = {} }) => {
+const RoomPreview = ({ dimensions = {}, wallImages = {}, unit }) => {
   const { length = 300, width = 300, height = 300 } = dimensions;
   const [rotation, setRotation] = useState({ x: 10, y: 20 });
 
@@ -44,40 +44,22 @@ const RoomPreview = ({ dimensions = {}, wallImages = {} }) => {
           transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
         }}
       >
-        <div
-          className="wall front"
-          style={{
-            height: `${height}px`,
-            width: `${length}px`,
-            backgroundImage: wallImages.front ? `url(${wallImages.front})` : 'none',
-          }}
-        ></div>
-        <div
-          className="wall back"
-          style={{
-            height: `${height}px`,
-            width: `${length}px`,
-            backgroundImage: wallImages.back ? `url(${wallImages.back})` : 'none',
-          }}
-        ></div>
-        <div
-          className="wall left"
-          style={{
-            height: `${height}px`,
-            width: `${width}px`,
-            backgroundImage: wallImages.left ? `url(${wallImages.left})` : 'none',
-          }}
-        ></div>
-        <div
-          className="wall right"
-          style={{
-            height: `${height}px`,
-            width: `${width}px`,
-            backgroundImage: wallImages.right ? `url(${wallImages.right})` : 'none',
-          }}
-        ></div>
-        <div className="wall top"></div>
-        <div className="wall bottom"></div>
+        {['front', 'back', 'left', 'right'].map((wall) => (
+          <div
+            key={wall}
+            className={`wall ${wall}`}
+            style={{
+              width: wall === 'left' || wall === 'right' ? `${width}px` : `${length}px`,
+              height: `${height}px`,
+            }}
+          >
+            {(wallImages[wall] || []).map((url, index) => (
+              <img key={index} src={url} className="wall-image" alt={`img-${wall}-${index}`} />
+            ))}
+          </div>
+        ))}
+        <div className="wall top" />
+        <div className="wall bottom" />
       </div>
     </div>
   );

@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 
-const ControlPanel = ({ dimensions, setDimensions, wallImages, setWallImages }) => {
+const ControlPanel = ({ dimensions, setDimensions, wallImages, setWallImages, unit, setUnit }) => {
   const [selectedWall, setSelectedWall] = useState('front');
   const [imageUrl, setImageUrl] = useState('');
 
+  const convertToPx = (value, unit) => {
+    const v = parseFloat(value);
+    if (unit === 'm') return v * 100;
+    if (unit === 'cm') return v;
+    if (unit === 'ft') return v * 30.48;
+    return v; // px
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDimensions((prev) => ({ ...prev, [name]: value }));
+    const pxValue = convertToPx(value, unit);
+    setDimensions((prev) => ({ ...prev, [name]: pxValue }));
   };
 
   const handleWallChange = (e) => {
@@ -15,7 +24,10 @@ const ControlPanel = ({ dimensions, setDimensions, wallImages, setWallImages }) 
 
   const handleImageUpload = () => {
     if (imageUrl && selectedWall) {
-      setWallImages((prev) => ({ ...prev, [selectedWall]: imageUrl }));
+      setWallImages((prev) => ({
+        ...prev,
+        [selectedWall]: [...prev[selectedWall], imageUrl],
+      }));
       setImageUrl('');
     }
   };
@@ -24,16 +36,23 @@ const ControlPanel = ({ dimensions, setDimensions, wallImages, setWallImages }) 
     <div>
       <h3>Control Panel</h3>
 
-      <label>Length (px):
-        <input type="number" name="length" value={dimensions.length} onChange={handleChange} />
-      </label><br />
+      <label>Units:
+        <select value={unit} onChange={(e) => setUnit(e.target.value)}>
+          <option value="px">Pixels</option>
+          <option value="cm">Centimeters</option>
+          <option value="m">Meters</option>
+          <option value="ft">Feet</option>
+        </select>
+      </label><br /><br />
 
-      <label>Width (px):
-        <input type="number" name="width" value={dimensions.width} onChange={handleChange} />
+      <label>Length:
+        <input type="number" name="length" onChange={handleChange} placeholder={`Length (${unit})`} />
       </label><br />
-
-      <label>Height (px):
-        <input type="number" name="height" value={dimensions.height} onChange={handleChange} />
+      <label>Width:
+        <input type="number" name="width" onChange={handleChange} placeholder={`Width (${unit})`} />
+      </label><br />
+      <label>Height:
+        <input type="number" name="height" onChange={handleChange} placeholder={`Height (${unit})`} />
       </label><br /><br />
 
       <label>Select Wall:
@@ -53,7 +72,7 @@ const ControlPanel = ({ dimensions, setDimensions, wallImages, setWallImages }) 
           placeholder="Enter image URL"
         />
       </label>
-      <button onClick={handleImageUpload}>Apply Image</button>
+      <button onClick={handleImageUpload}>Add Image</button>
     </div>
   );
 };

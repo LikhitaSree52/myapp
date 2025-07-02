@@ -1,12 +1,10 @@
 import React from 'react';
-import '../styles/App.css';
 
 const WelcomeScreen = ({ onStart }) => {
   return (
-    <div className="welcome-screen">
-      <h1>Welcome to Room Customizer 🏠</h1>
-      <p>Design your space with your own images and room dimensions.</p>
-      <button className="start-button" onClick={onStart}>
+    <div style={{ textAlign: 'center', paddingTop: '100px' }}>
+      <h1>Welcome to Room Customizer</h1>
+      <button onClick={onStart} style={{ fontSize: '18px', padding: '10px 20px' }}>
         Get Started
       </button>
     </div>

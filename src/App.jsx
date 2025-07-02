@@ -3,18 +3,9 @@ import WelcomeScreen from './components/WelcomeScreen';
 import RoomLayout from './components/RoomLayout';
 import './styles/App.css';
 
-const App = () => {
+function App() {
   const [started, setStarted] = useState(false);
-
-  return (
-    <div className="App">
-      {started ? (
-        <RoomLayout />
-      ) : (
-        <WelcomeScreen onStart={() => setStarted(true)} />
-      )}
-    </div>
-  );
-};
+  return <>{started ? <RoomLayout /> : <WelcomeScreen onStart={() => setStarted(true)} />}</>;
+}
 
 export default App;
